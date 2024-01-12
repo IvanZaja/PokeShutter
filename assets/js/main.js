@@ -4,4 +4,5 @@ window.addEventListener('load', () => {
 
   document.addEventListener('keydown', (event) => game.onKeyEvent(event));
   document.addEventListener('keyup', (event) => game.onKeyEvent(event));
+  document.addEventListener('click', (event) => game.onClickEvent(event));
 });
