@@ -20,12 +20,15 @@ class player {
       this.sprite.frameHeight = Math.ceil(this.sprite.height / this.sprite.verticalFrames);
     };
 
+    this.shouts = [];
+
     this.movements = {
       up: false,
       down: false,
+      isShutting: false
     };
 
-    this.animationTick = 0;
+    this.animationTick = PJ_ANIMATION_TICK;
   }
 
   onKeyEvent(event) {
@@ -38,10 +41,31 @@ class player {
       case KEY_DOWN:
         this.movements.down = enabled;
         break;
+      case KEY_FIRE:
+        if (enabled) {
+          this.fire();
+        }
+        break;
     }
   }
 
+  fire() {
+    if(!this.movements.isShutting) {
+      this.movements.isShutting = true;
+      this.shouts.push(new shout(this.ctx, this.x + this.w, this.y + Math.ceil(this.h / 2)));
+      setTimeout(() => this.movements.isShutting = false, PJ_SHOUT_INTERVAL);
+    }
+    
+  }
+
+  clear() {
+    this.shouts = this.shouts.filter ((shout) => shout.x < this.ctx.canvas.width);
+  }
+
   move() {
+
+    this.shouts.forEach((shout) => shout.move());
+
     if (this.movements.up) {
       this.y -= this.vy;
     } else if (this.movements.down) {
@@ -64,6 +88,8 @@ class player {
         this.w,
         this.h
       );
+
+      this.shouts.forEach((shout) => shout.draw());
 
       if (this.movements.up) {
         this.animateUp();
@@ -88,11 +114,10 @@ class player {
     ) {
       this.animationTick = 0;
       this.sprite.horizontalFrameIndex++;
-      this.sprite.verticalFrameIndex = 1;
 
       if (this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames - 1) {
         this.sprite.horizontalFrameIndex = 1;
-        this.sprite.verticalFrameIndex = 1;
+        
       }
     }
   }

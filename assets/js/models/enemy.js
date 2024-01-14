@@ -3,8 +3,9 @@ class enemy {
     this.ctx = ctx;
 
     this.x = x;
-    this.vx = SPEED_MOVE;
+    this.vx = ENEMY_SPEED_MOVE;
     this.y = y;
+    this.vx = 1;
     this.w = Math.ceil(137/4);
     this.h = Math.ceil(114/4);
 
@@ -20,6 +21,14 @@ class enemy {
       this.sprite.frameWidth = Math.ceil(this.sprite.width / this.sprite.horizontalFrames);
       this.sprite.frameHeight = Math.ceil(this.sprite.height / this.sprite.verticalFrames);
     };
+
+    this.animationTick = ENEMY_ANIMATION_TICK;
+    
+  }
+
+  move() {
+    this.x -= this.vx;
+    
   }
 
   draw() {
@@ -35,6 +44,21 @@ class enemy {
         this.w,
         this.h
       );
+      this.animate();
+    }
+  }
+
+  animate() {
+    this.animationTick++;
+
+    if (this.animationTick >= ENEMY_ANIMATION_TICK) {
+      this.animationTick = 0;
+
+      this.sprite.horizontalFrameIndex++;
+
+      if(this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames -1) {
+        this.sprite.horizontalFrameIndex = 0;
+      }
     }
   }
 }

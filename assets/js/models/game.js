@@ -11,22 +11,22 @@ class Game {
 
     this.background = new Background(this.ctx);
     this.player = new player(this.ctx, PJ_X_PADDING, PJ_Y_PADDING);
-    this.enemy = new enemy(this.ctx, this.canvas.width -50, ENEMY_Y_PADDING);
-    //  this.shout = new shout(this.ctx, 250, 250);
+    this.enemies = [
+      new enemy(this.ctx, this.canvas.width, ENEMY_Y_PADDING)
+    ];
+
+    this.addEnemyBackoff = 3000;
+    setTimeout(() => this.addEnemy(), this.addEnemyBackoff);
   }
 
   onKeyEvent(event) {
     this.player.onKeyEvent(event);
   }
 
-  onClickEvent(event) {
-    this.shout.onClickEvent(event);
-  }
-
   start() {
     if (!this.drawIntervalId) {
       this.drawIntervalId = setInterval(() => {
-        this.clear();
+        this.clear();    
         this.move();
         this.draw();
       }, this.fps);
@@ -38,18 +38,27 @@ class Game {
     this.drawIntervalId = undefined;
   }
 
+  addEnemy() {
+    if(this.drawIntervalId) {
+      this.enemies.push(new enemy(this.ctx, this.canvas.width, Math.floor(Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100)));
+    }
+    this.addEnemyBackoff = Math.floor(Math.random() * 6 + 1) * 1000;
+    setTimeout(() => this.addEnemy(), this.addEnemyBackoff);
+  }
+
   move() {
     this.player.move();
+    this.enemies.forEach((enemy) => enemy.move());
   }
 
   draw() {
     this.background.draw();
     this.player.draw();
-    this.enemy.draw();
-    // this.shout.draw();
+    this.enemies.forEach((enemy) => enemy.draw());
   }
 
   clear() {
+    this.player.clear();
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 }
