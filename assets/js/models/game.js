@@ -14,6 +14,12 @@ class Game {
     this.player = new player(this.ctx, PJ_X_PADDING, PJ_Y_PADDING);
     this.enemies = [new enemy(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
 
+    this.points = 0;
+    
+    this.audioDead = new Audio("/assets/sounds/ballshake.wav");
+    this.audioGameOver = new Audio("/assets/sounds/buzzer.wav");
+    this.audioGameStarts = new Audio('/assets/sounds/gameBattle.wav')
+
     this.addEnemyBackoff = 3000;
     setTimeout(() => this.addEnemy(), this.addEnemyBackoff);
   }
@@ -23,9 +29,9 @@ class Game {
   }
 
   start() {
-
     if (!this.drawIntervalId) {
       this.drawIntervalId = setInterval(() => {
+        this.audioGameStarts.play();
         this.clear();
         this.move();
         this.draw();
@@ -44,6 +50,7 @@ class Game {
       if (enemy.collidesWith(this.endline)) {
         console.log ('collision');
         this.gameOver();
+        this.audioGameOver.play();
       }
     })
 
@@ -51,6 +58,10 @@ class Game {
       const enemy = this.enemies.find(enemy => enemy.collidesWith(shout));
       if (enemy) {
         enemy.hp--;
+        if (enemy.isDead()) {
+          this.audioDead.play();
+          this.points++;
+        }
         return false;
       } else {
         return true;
@@ -83,6 +94,7 @@ class Game {
   }
 
   draw() {
+    
     this.background.draw();
     this.endline.draw();
     this.player.draw();

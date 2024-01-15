@@ -7,6 +7,31 @@ class player {
     this.w = Math.ceil(115 / 2.7);
     this.h = Math.ceil(153 / 2.7);
 
+    this.audioShout = new Audio("/assets/sounds/throw.wav");
+    this.audioReload = new Audio('/assets/sounds/ItemGet.wav')
+    this.audioNoPokeballs = new Audio('/assets/sounds/exclaim.wav')
+
+    this.reaction = new Image();
+    this.reaction.src = '/assets/img/NoBalls.png';
+    this.reaction.verticalFrames = 1;
+    this.reaction.verticalFrameIndex = 0;
+    this.reaction.horizontalFrames = 1;
+    this.reaction.horizontalFrameIndex = 0;
+
+    this.reaction.w = Math.ceil(163 / 5.5);
+    this.reaction.h = Math.ceil(160 / 5.5);
+
+
+    this.reaction.onload = () => {
+      this.reaction.isReady = true;
+      this.reaction.frameWidth = Math.ceil(
+        this.reaction.width / this.reaction.horizontalFrames
+      );
+      this.reaction.frameHeight = Math.ceil(
+        this.reaction.height / this.reaction.verticalFrames
+      );
+    };
+
     this.sprite = new Image();
     this.sprite.src = "/assets/img/pj-sprite.png";
     this.sprite.verticalFrames = 3;
@@ -59,11 +84,13 @@ class player {
   fire() {
     const disabled = event.type === "keyup"
     if (this.pokeballs === 0) {
+      this.audioNoPokeballs.play();
       KEY_FIRE = disabled;
     }
 
     if (!this.movements.isShutting) {
       this.movements.isShutting = true;
+      this.audioShout.play();
       this.pokeballs--;
       console.log(this.pokeballs)
       this.shouts.push(
@@ -91,9 +118,41 @@ class player {
 
   draw() {
 
+
+    
+    if (this.reaction.isReady && this.pokeballs === 0) {
+      this.reaction.src = "/assets/img/NoBalls.png";
+      this.ctx.drawImage(
+        this.reaction,
+        this.reaction.horizontalFrameIndex * this.reaction.frameWidth,
+        this.reaction.verticalFrameIndex * this.reaction.frameHeight,
+        this.reaction.frameWidth,
+        this.reaction.frameHeight,
+        this.x + 7,
+        this.y - 30,
+        this.reaction.w,
+        this.reaction.h
+      );
+    }
+
     if (this.y < PJ_TOP_LIMIT) {
       this.y = PJ_TOP_LIMIT;
+      this.audioReload.play();
       this.pokeballs = 6;
+      if (this.reaction.isReady) {
+        this.reaction.src = "/assets/img/reloaded.png";
+        this.ctx.drawImage(
+          this.reaction,
+          this.reaction.horizontalFrameIndex * this.reaction.frameWidth,
+          this.reaction.verticalFrameIndex * this.reaction.frameHeight,
+          this.reaction.frameWidth,
+          this.reaction.frameHeight,
+          this.x + 7,
+          this.y - 30,
+          this.reaction.w,
+          this.reaction.h
+        );
+      }
     } else if (this.y > PJ_BOTTOM_LIMIT) {
       this.y = PJ_BOTTOM_LIMIT;
     }
