@@ -6,8 +6,8 @@ class enemy {
     this.vx = ENEMY_SPEED_MOVE;
     this.y = y;
     this.vx = 1;
-    this.w = Math.ceil(137/4);
-    this.h = Math.ceil(114/4);
+    this.w = Math.ceil(137 / 4);
+    this.h = Math.ceil(114 / 4);
 
     this.sprite = new Image();
     this.sprite.src = "/assets/img/enemy.png";
@@ -18,17 +18,25 @@ class enemy {
 
     this.sprite.onload = () => {
       this.sprite.isReady = true;
-      this.sprite.frameWidth = Math.ceil(this.sprite.width / this.sprite.horizontalFrames);
-      this.sprite.frameHeight = Math.ceil(this.sprite.height / this.sprite.verticalFrames);
+      this.sprite.frameWidth = Math.ceil(
+        this.sprite.width / this.sprite.horizontalFrames
+      );
+      this.sprite.frameHeight = Math.ceil(
+        this.sprite.height / this.sprite.verticalFrames
+      );
     };
 
     this.animationTick = ENEMY_ANIMATION_TICK;
-    
+
+    this.hp = 1;
+  }
+
+  isDead() {
+    return this.hp <= 0;
   }
 
   move() {
     this.x -= this.vx;
-    
   }
 
   draw() {
@@ -56,9 +64,20 @@ class enemy {
 
       this.sprite.horizontalFrameIndex++;
 
-      if(this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames -1) {
+      if (this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames - 1) {
         this.sprite.horizontalFrameIndex = 0;
       }
     }
   }
+
+  collidesWith (element) {
+
+    return(
+      this.x + this.w > element.x &&
+      this.x < element.x + element.w &&
+      this.y + this.h > element.h &&
+      this.y < element.y + element.h 
+    );
+  }
+
 }

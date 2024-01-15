@@ -16,16 +16,22 @@ class player {
 
     this.sprite.onload = () => {
       this.sprite.isReady = true;
-      this.sprite.frameWidth = Math.ceil(this.sprite.width / this.sprite.horizontalFrames);
-      this.sprite.frameHeight = Math.ceil(this.sprite.height / this.sprite.verticalFrames);
+      this.sprite.frameWidth = Math.ceil(
+        this.sprite.width / this.sprite.horizontalFrames
+      );
+      this.sprite.frameHeight = Math.ceil(
+        this.sprite.height / this.sprite.verticalFrames
+      );
     };
+
+    this.pokeballs = 6;
 
     this.shouts = [];
 
     this.movements = {
       up: false,
       down: false,
-      isShutting: false
+      isShutting: false,
     };
 
     this.animationTick = PJ_ANIMATION_TICK;
@@ -34,6 +40,7 @@ class player {
   onKeyEvent(event) {
     const enabled = event.type === "keydown";
     
+
     switch (event.keyCode) {
       case KEY_UP:
         this.movements.up = enabled;
@@ -50,20 +57,29 @@ class player {
   }
 
   fire() {
-    if(!this.movements.isShutting) {
-      this.movements.isShutting = true;
-      this.shouts.push(new shout(this.ctx, this.x + this.w, this.y + Math.ceil(this.h / 2)));
-      setTimeout(() => this.movements.isShutting = false, PJ_SHOUT_INTERVAL);
+    const disabled = event.type === "keyup"
+    if (this.pokeballs === 0) {
+      KEY_FIRE = disabled;
     }
-    
+
+    if (!this.movements.isShutting) {
+      this.movements.isShutting = true;
+      this.pokeballs--;
+      console.log(this.pokeballs)
+      this.shouts.push(
+        new shout(this.ctx, this.x + this.w, this.y + Math.ceil(this.h / 2))
+      );
+      setTimeout(() => (this.movements.isShutting = false), PJ_SHOUT_INTERVAL);
+    }
   }
 
   clear() {
-    this.shouts = this.shouts.filter ((shout) => shout.x < this.ctx.canvas.width);
+    this.shouts = this.shouts.filter(
+      (shout) => shout.x < this.ctx.canvas.width
+    );
   }
 
   move() {
-
     this.shouts.forEach((shout) => shout.move());
 
     if (this.movements.up) {
@@ -71,11 +87,17 @@ class player {
     } else if (this.movements.down) {
       this.y += this.vy;
     }
-
-
   }
 
   draw() {
+
+    if (this.y < PJ_TOP_LIMIT) {
+      this.y = PJ_TOP_LIMIT;
+      this.pokeballs = 6;
+    } else if (this.y > PJ_BOTTOM_LIMIT) {
+      this.y = PJ_BOTTOM_LIMIT;
+    }
+
     if (this.sprite.isReady) {
       this.ctx.drawImage(
         this.sprite,
@@ -117,7 +139,6 @@ class player {
 
       if (this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames - 1) {
         this.sprite.horizontalFrameIndex = 1;
-        
       }
     }
   }
