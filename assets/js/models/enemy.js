@@ -1,11 +1,11 @@
 class enemy {
-  constructor(ctx, x, y) {
+  constructor(ctx, x, y, level) {
     this.ctx = ctx;
 
     this.x = x;
-    this.vx = ENEMY_SPEED_MOVE;
+    this.vx = ENEMY_SPEED_MOVE * level;
     this.y = y;
-    this.vx = 1;
+    
     this.w = Math.ceil(137 / 4);
     this.h = Math.ceil(114 / 4);
 
@@ -15,6 +15,7 @@ class enemy {
     this.sprite.verticalFrameIndex = 2;
     this.sprite.horizontalFrames = 2;
     this.sprite.horizontalFrameIndex = 0;
+
 
     this.sprite.onload = () => {
       this.sprite.isReady = true;
@@ -32,6 +33,7 @@ class enemy {
   }
 
   isDead() {
+    
     return this.hp <= 0;
   }
 
@@ -73,11 +75,11 @@ class enemy {
   collidesWith (element) {
 
     return(
+      
       this.x + this.w > element.x &&
       this.x < element.x + element.w &&
-      this.y + this.h > element.h &&
+      this.y + this.h > element.y &&
       this.y < element.y + element.h 
     );
   }
-
 }

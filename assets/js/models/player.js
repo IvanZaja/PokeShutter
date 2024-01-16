@@ -85,12 +85,14 @@ class player {
     const disabled = event.type === "keyup"
     if (this.pokeballs === 0) {
       this.audioNoPokeballs.play();
+      this.audioNoPokeballs.volume = 0.1;
       KEY_FIRE = disabled;
     }
 
     if (!this.movements.isShutting) {
       this.movements.isShutting = true;
       this.audioShout.play();
+      this.audioShout.volume = 0.1;
       this.pokeballs--;
       console.log(this.pokeballs)
       this.shouts.push(
@@ -138,6 +140,7 @@ class player {
     if (this.y < PJ_TOP_LIMIT) {
       this.y = PJ_TOP_LIMIT;
       this.audioReload.play();
+      this.audioReload.volume = 0.1;
       this.pokeballs = 6;
       if (this.reaction.isReady) {
         this.reaction.src = "/assets/img/reloaded.png";
