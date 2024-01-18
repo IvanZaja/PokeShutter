@@ -26,4 +26,6 @@ const ENEMY_SPAWN_TICK = 300;
 const SPEED_MOVE = 5;
 const SPEED_SHOUT = 5;
 
+const SCORE_KEY = 'scores';
+
 const POKEMONS = {bulbasaur: 3};

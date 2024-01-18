@@ -14,9 +14,14 @@ class Game {
     this.player = new player(this.ctx, PJ_X_PADDING, PJ_Y_PADDING);
     this.enemies = [new enemy(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
 
-    this.points = 0;
+    // SISTEMAS DE PUNTUACION ////////
 
+    this.score = new Score(this.ctx, 10, 26);
+    this.catched = 0;
     this.level = 1;
+
+    /////////////////////////////////
+    
     
     this.audioDead = new Audio("/assets/sounds/ballshake.wav");
     this.audioGameOver = new Audio("/assets/sounds/buzzer.wav");
@@ -48,7 +53,7 @@ class Game {
 
 
   levelUp() {
-    if(this.points % 10 === 0) {
+    if(this.score.points % 10 === 0) {
       this.level++;
     }
   } 
@@ -80,8 +85,8 @@ class Game {
         if (enemy.isDead()) {
           this.audioDead.play();
           this.audioDead.volume = 0.1;
-          this.points++;
-          console.log(`${this.points} points`);
+          this.score.inc();
+          console.log(`${this.score.points} points`);
           console.log(`${this.level} level`);
           this.levelUp();
         }
@@ -116,6 +121,7 @@ class Game {
     this.background.draw();
     this.player.draw();
     this.enemies.forEach((enemy) => enemy.draw());
+    this.score.draw();
   }
 
   clear() {
@@ -126,5 +132,18 @@ class Game {
 
   gameOver () {
     this.stop();
+    this.saveScoreName('Ivan');
+    const gameOverPanel = document.getElementById('panelGameOver');
+    gameOverPanel.classList.remove('hidden');
+
+    const canvasPanel = document.getElementById('main-canvas');
+    canvasPanel.classList.add('behind');
+    
+  }
+
+  saveScoreName(name) {
+    const scores = localStorage.getItem(SCORE_KEY) ? JSON.parse(localStorage.getItem(SCORE_KEY)) : {};
+    scores[name] = this.score.points;
+    localStorage.setItem(SCORE_KEY, JSON.stringify(scores));
   }
 }
