@@ -4,8 +4,8 @@ class player {
     this.x = x;
     this.y = y;
     this.vy = SPEED_MOVE;
-    this.w = Math.ceil(115 / 2.7);
-    this.h = Math.ceil(153 / 2.7);
+    this.w = Math.ceil(115 / 3.3);
+    this.h = Math.ceil(153 / 3.3);
 
     this.audioShout = new Audio("/assets/sounds/throw.wav");
     this.audioReload = new Audio('/assets/sounds/ItemGet.wav')
@@ -33,7 +33,7 @@ class player {
     };
 
     this.sprite = new Image();
-    this.sprite.src = "/assets/img/pj-sprite.png";
+    this.sprite.src = "/assets/img/pj-sprite3.png";
     this.sprite.verticalFrames = 3;
     this.sprite.verticalFrameIndex = 2;
     this.sprite.horizontalFrames = 3;
@@ -41,12 +41,8 @@ class player {
 
     this.sprite.onload = () => {
       this.sprite.isReady = true;
-      this.sprite.frameWidth = Math.ceil(
-        this.sprite.width / this.sprite.horizontalFrames
-      );
-      this.sprite.frameHeight = Math.ceil(
-        this.sprite.height / this.sprite.verticalFrames
-      );
+      this.sprite.frameWidth = Math.ceil(this.sprite.width / this.sprite.horizontalFrames);
+      this.sprite.frameHeight = Math.ceil(this.sprite.height / this.sprite.verticalFrames);
     };
 
     this.pokeballs = 6;
@@ -93,7 +89,9 @@ class player {
       this.movements.isShutting = true;
       this.audioShout.play();
       this.audioShout.volume = 0.1;
-      this.pokeballs--;
+      this.pokeballs--
+      this.sprite.horizontalFrameIndex = 1;
+      this.sprite.verticalFrameIndex = 2;
       console.log(this.pokeballs)
       this.shouts.push(
         new shout(this.ctx, this.x + this.w, this.y + Math.ceil(this.h / 2))
@@ -130,8 +128,8 @@ class player {
         this.reaction.verticalFrameIndex * this.reaction.frameHeight,
         this.reaction.frameWidth,
         this.reaction.frameHeight,
-        this.x + 7,
-        this.y - 30,
+        this.x + 3,
+        this.y - 34,
         this.reaction.w,
         this.reaction.h
       );
@@ -139,6 +137,8 @@ class player {
 
     if (this.y < PJ_TOP_LIMIT) {
       this.y = PJ_TOP_LIMIT;
+      this.sprite.horizontalFrameIndex = 0;
+      this.sprite.verticalFrameIndex = 1;
       this.audioReload.play();
       this.audioReload.volume = 0.1;
       this.pokeballs = 6;
@@ -150,8 +150,8 @@ class player {
           this.reaction.verticalFrameIndex * this.reaction.frameHeight,
           this.reaction.frameWidth,
           this.reaction.frameHeight,
-          this.x + 7,
-          this.y - 30,
+          this.x + 3,
+          this.y - 34,
           this.reaction.w,
           this.reaction.h
         );
@@ -187,42 +187,40 @@ class player {
   }
 
   animateUp() {
-    this.animationTick++;
+    this.animationTick += 9;
 
     if (this.movements.up) {
       this.sprite.horizontalFrameIndex = 1;
       this.sprite.verticalFrameIndex = 1;
-    } else if (
-      this.animationTick >= PJ_RUN_ANIMATION_TICK &&
-      this.movements.up
-    ) {
-      this.animationTick = 0;
-      this.sprite.horizontalFrameIndex++;
 
-      if (this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames - 1) {
-        this.sprite.horizontalFrameIndex = 1;
+      if (this.animationTick >= PJ_RUN_ANIMATION_TICK) {
+        this.animationTick = PJ_ANIMATION_TICK;
+        this.sprite.horizontalFrameIndex++;
+  
+        if (this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames -1) {
+          this.sprite.horizontalFrameIndex = 1;
+        }
       }
-    }
+    }  
   }
 
   animateDown() {
-    this.animationTick++;
+    this.animationTick += 9;
 
     if (this.movements.down) {
       this.sprite.horizontalFrameIndex = 1;
       this.sprite.verticalFrameIndex = 0;
-    } else if (
-      this.animationTick >= PJ_RUN_ANIMATION_TICK &&
-      this.movements.down
-    ) {
-      this.animationTick = 0;
-      this.sprite.horizontalFrameIndex++;
-      this.sprite.verticalFrameIndex = 0;
 
-      if (this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames - 1) {
-        this.sprite.horizontalFrameIndex = 1;
+      if (this.animationTick >= PJ_RUN_ANIMATION_TICK) {
+        this.animationTick = PJ_ANIMATION_TICK;
+        this.sprite.horizontalFrameIndex++;
         this.sprite.verticalFrameIndex = 0;
+  
+        if (this.sprite.horizontalFrameIndex > this.sprite.horizontalFrames - 1) {
+          this.sprite.horizontalFrameIndex = 1;
+          this.sprite.verticalFrameIndex = 0;
+        }
       }
     }
+    }  
   }
-}

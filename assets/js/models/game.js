@@ -13,6 +13,7 @@ class Game {
     
     this.player = new player(this.ctx, PJ_X_PADDING, PJ_Y_PADDING);
     this.enemies = [new enemy(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
+    
 
     // SISTEMAS DE PUNTUACION ////////
 
@@ -25,7 +26,8 @@ class Game {
     
     this.audioDead = new Audio("/assets/sounds/ballshake.wav");
     this.audioGameOver = new Audio("/assets/sounds/buzzer.wav");
-    this.audioGameStarts = new Audio('/assets/sounds/gameBattle.wav')
+    this.audioGameStarts = new Audio('/assets/sounds/gameBattle.wav');
+    this.audioLvlUp = new Audio("/assets/sounds/StatUp.wav");
 
     this.addEnemyBackoff = 3000;
     setTimeout(() => this.addEnemy(), this.addEnemyBackoff);
@@ -50,12 +52,57 @@ class Game {
   }
 
 
+  transition() {
+    const transition = document.getElementById('blackIn');
+    if(transition.className === 'hidden') {
+      transition.classList.remove('hidden');
+      transition.classList.add('transition1');
+      setTimeout(() => {
+        transition.classList.add('transition2');
+        transition.classList.remove('transition1');
+        setTimeout(() => {
+          if (transition.classList.value === 'transition2') {
+            transition.classList.add('hidden');
+            transition.classList.remove('transition2');
+          }
+        }, 1000)
+      }, 1000);
+    }  
+  }
 
 
   levelUp() {
     if(this.score.points % 10 === 0) {
-      this.level++;
+      this.transition();
+      this.enemies = [];
+      this.level++;   
+      this.audioLvlUp.play();
     }
+
+    if(this.score.points === 20) {
+      this.transition();
+      setTimeout(() => this.background.sprite.src = '/assets/img/maps/bg2.jpg', 1000);
+      this.enemies = [];
+      
+      
+    } else if (this.score.points === 30) {
+      this.transition();
+      setTimeout(() => this.background.sprite.src = '/assets/img/maps/bg.jpg', 1000);
+      this.enemies = [];
+      
+      
+    } else if (this.score.points === 40) {
+      this.transition();
+      setTimeout(() => this.background.sprite.src = '/assets/img/maps/bg2.jpg', 1000);
+      this.enemies = [];
+      
+      
+    } else if (this.score.points === 50) {
+      this.transition();
+      setTimeout(() => this.background.sprite.src = '/assets/img/maps/bg.jpg', 1000);
+      this.enemies = [];
+    }
+
   } 
 
   stop() {
@@ -117,10 +164,10 @@ class Game {
   }
 
   draw() {
-    
     this.background.draw();
     this.player.draw();
     this.enemies.forEach((enemy) => enemy.draw());
+    // this.transition.draw();
     this.score.draw();
   }
 
@@ -135,9 +182,6 @@ class Game {
     this.saveScoreName('Ivan');
     const gameOverPanel = document.getElementById('panelGameOver');
     gameOverPanel.classList.remove('hidden');
-
-    const canvasPanel = document.getElementById('main-canvas');
-    canvasPanel.classList.add('behind');
     
   }
 
