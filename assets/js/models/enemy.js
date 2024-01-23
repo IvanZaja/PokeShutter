@@ -5,14 +5,16 @@ class enemy {
     this.x = x;
     this.vx = ENEMY_SPEED_MOVE * level;
     this.y = y;
+
+    const randomPoke = POKEMONS1[Math.floor(Math.random() * 4)];
     
-    this.w = Math.ceil(137 / 4);
-    this.h = Math.ceil(114 / 4);
+    this.w = randomPoke.w
+    this.h = randomPoke.h
 
     this.sprite = new Image();
-    this.sprite.src = "/assets/img/enemy.png";
-    this.sprite.verticalFrames = 3;
-    this.sprite.verticalFrameIndex = 2;
+    this.sprite.src = randomPoke.sprite;
+    this.sprite.verticalFrames = 1;
+    this.sprite.verticalFrameIndex = 0;
     this.sprite.horizontalFrames = 2;
     this.sprite.horizontalFrameIndex = 0;
 
@@ -42,6 +44,11 @@ class enemy {
   }
 
   draw() {
+
+    if (this.y < PJ_TOP_LIMIT) {
+      this.y = PJ_TOP_LIMIT;
+    }
+
     if (this.sprite.isReady) {
       this.ctx.drawImage(
         this.sprite,

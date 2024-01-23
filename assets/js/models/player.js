@@ -117,9 +117,6 @@ class player {
   }
 
   draw() {
-
-
-    
     if (this.reaction.isReady && this.pokeballs === 0) {
       this.reaction.src = "/assets/img/NoBalls.png";
       this.ctx.drawImage(

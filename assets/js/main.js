@@ -1,5 +1,6 @@
 window.addEventListener("load", () => {
   const game = new Game("main-canvas");
+  //window.game = game
 
   document.addEventListener("keydown", (event) => game.onKeyEvent(event));
   document.addEventListener("keyup", (event) => game.onKeyEvent(event));
