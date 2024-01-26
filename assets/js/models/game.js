@@ -15,6 +15,7 @@ class Game {
     this.enemies = [new enemy(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
     this.enemies2 = [new Enemy2(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
     this.enemies3 = [new Enemy3(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
+    this.boss = new Boss(this.ctx, 200, 200);
 
     this.enemyTick = 1;
     
@@ -34,15 +35,17 @@ class Game {
     this.audioLvlUp = new Audio("/assets/sounds/StatUp.wav");
 
     this.addEnemyBackoff = 3000;
-    this.addEnemy2Backoff = 6000;
-    this.addEnemy3Backoff = 6000;
+    this.addEnemy2Backoff = 7000;
+    this.addEnemy3Backoff = 10000;
     setTimeout(() => this.addEnemy(), this.addEnemyBackoff);
     setTimeout(() => this.addEnemy2(), this.addEnemy2Backoff);
     setTimeout(() => this.addEnemy3(), this.addEnemy3Backoff);
   }
 
+
+  
   onKeyEvent(event) {
-    this.player.onKeyEvent(event);
+    this.player.onKeyEvent(event, this);
   }
 
   start() {
@@ -111,10 +114,12 @@ class Game {
       
     } else if (this.score.points === 50) {
       this.transition();
-      setTimeout(() => this.background.sprite.src = '/assets/img/maps/bg.jpg', 1000);
+      setTimeout(() => this.background.sprite.src = '/assets/img/maps/bgBOSS.jpg', 1000);
       this.enemies = [];
       this.enemies2 = [];
       this.enemies3 = [];
+
+      
     }
 
   } 
@@ -278,11 +283,18 @@ class Game {
     setTimeout(() => this.addEnemy3(), this.addEnemy3Backoff);
   }
 
+  addBoss() {
+    if (this.drawIntervalId) {
+      new Boss(this.ctx, this.x, this.y);
+    }
+  }
+
   move() {
     this.player.move();
     this.enemies.forEach((enemy) => enemy.move());
     this.enemies2.forEach((Enemy2) => Enemy2.move());
     this.enemies3.forEach((Enemy3) => Enemy3.move()); 
+   // this.boss.move()
   }
 
   draw() {
@@ -291,6 +303,7 @@ class Game {
     this.enemies.forEach((enemy) => enemy.draw());
     this.enemies2.forEach((Enemy2) => Enemy2.draw());
     this.enemies3.forEach((Enemy3) => Enemy3.draw());
+    this.boss.draw();
     this.score.draw();
   }
 
@@ -299,6 +312,7 @@ class Game {
     this.enemies = this.enemies.filter((enemy) => !enemy.isDead());
     this.enemies2 = this.enemies2.filter((Enemy2) => !Enemy2.isDead());
     this.enemies3 = this.enemies3.filter((Enemy3) => !Enemy3.isDead());
+   // this.boss = this.boss.filter((Boss) => !Boss.isDead());
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 

@@ -44,6 +44,12 @@ class player {
       this.sprite.frameWidth = Math.ceil(this.sprite.width / this.sprite.horizontalFrames);
       this.sprite.frameHeight = Math.ceil(this.sprite.height / this.sprite.verticalFrames);
     };
+    
+    this.tutorial = {
+      isOpen: false,
+      isClose: false,
+      isFinish: false
+    };
 
     this.pokeballs = 6;
 
@@ -58,7 +64,7 @@ class player {
     this.animationTick = PJ_ANIMATION_TICK;
   }
 
-  onKeyEvent(event) {
+  onKeyEvent(event, game) {
     const enabled = event.type === "keydown";
     
 
@@ -71,15 +77,35 @@ class player {
         break;
       case KEY_FIRE:
         if (enabled) {
-          this.fire();
+          this.fire(game);
         }
         break;
     }
   }
 
-  fire() {
+  fire(game) {
     const disabled = event.type === "keyup"
     if (this.pokeballs === 0) {
+
+      if(!this.tutorial.isOpen || !this.tutorial.isClose || !this.tutorial.isFinish) {
+        const tutorialPanel = document.getElementById('main-tutorial');
+        const tutorialPanel2 = document.getElementById('main-tutorial2');
+        if(!this.tutorial.isOpen) {
+          this.tutorial.isOpen = true;
+          game.stop();
+          tutorialPanel.classList.remove('hidden');
+        } else if (!this.tutorial.isFinish) {
+          this.tutorial.isFinish = true;
+          tutorialPanel.classList.add('hidden');
+          tutorialPanel2.classList.remove('hidden');
+        } else if (!this.tutorial.isClose) {
+          tutorialPanel2.classList.add('hidden');
+          game.start();
+          this.tutorial.isClose = true;
+        }
+        
+      }
+
       this.audioNoPokeballs.play();
       this.audioNoPokeballs.volume = 0.1;
       KEY_FIRE = disabled;
