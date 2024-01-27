@@ -58,3 +58,19 @@ const POKEMONS3 = [
     {sprite: "/assets/img/enemies/Enemy3B.png", w: Math.ceil(19 * 1.9), h: Math.ceil(19 * 1.9)},
     {sprite: "/assets/img/enemies/Enemy3CC.png", w: Math.ceil(24 * 1.7), h: Math.ceil(23 * 1.7)}
 ]
+  
+
+const POKEATTACK_X = [
+    -100,
+    -50,
+    50,
+    100,
+    150,
+    200,
+    250,
+    300,
+    350,
+    400,
+    450,
+    500,
+]

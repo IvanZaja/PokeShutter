@@ -223,4 +223,15 @@ class PlayerH {
       }
     }
     }  
+
+    collidesWith (element) {
+
+      return(
+        
+        this.x + this.w > element.x &&
+        this.x < element.x + element.w &&
+        this.y + this.h > element.y &&
+        this.y < element.y + element.h 
+      );
+    }
   }

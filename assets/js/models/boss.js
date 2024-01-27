@@ -30,11 +30,21 @@ class Boss {
             );
         };
 
+        this.shouts = [];
+        this.isShutting = false;
+
         this.animationTick = ENEMY_ANIMATION_TICK;
     }
 
+  clear() {
+    this.shouts = this.shouts.filter(
+      (attack) => attack.y < 500
+    );
+  }
 
     move() {
+        this.shouts.forEach((attack) => attack.move());
+
         this.y += this.vy;
     }
 
@@ -66,7 +76,25 @@ class Boss {
           );
           this.animate();
         }
+
+        setTimeout(() => this.attack(), 2000);
+        this.shouts.forEach((attack) => attack.draw());
+        console.log(this.shouts);
     }
+
+    
+
+    attack() {
+        
+        if (!this.isShutting) {
+            this.isShutting = true;
+            this.shouts.push(
+              new Attack(this.ctx, POKEATTACK_X[Math.floor(Math.random() * 12)] + this.w, this.y + Math.ceil(this.h / 2))
+            );
+            setTimeout(() => (this.isShutting = false), 500);
+          }
+        }
+    
 
       animate() {
         this.animationTick++;

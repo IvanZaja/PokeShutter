@@ -214,6 +214,16 @@ class Game {
       }
     })
 
+    this.boss.shouts = this.boss.shouts.filter((attack) => {
+      const playerH = this.playerH.collidesWith(attack);
+      if (playerH) {
+        this.gameOver();
+        return false;
+      } else {
+        return true;
+      }
+    })
+
     
 
     this.player.shouts = this.player.shouts.filter((shout) => {
