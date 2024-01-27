@@ -12,10 +12,11 @@ class Game {
     this.background = new Background(this.ctx);
     
     this.player = new player(this.ctx, PJ_X_PADDING, PJ_Y_PADDING);
+    this.playerH = new PlayerH(this.ctx, 350, 445);
     this.enemies = [new enemy(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
     this.enemies2 = [new Enemy2(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
     this.enemies3 = [new Enemy3(this.ctx, this.canvas.width, ENEMY_Y_PADDING)];
-    this.boss = new Boss(this.ctx, 200, 200);
+    this.boss = new Boss(this.ctx, BOSS_X_PADDING, BOSS_Y_PADDING);
 
     this.enemyTick = 1;
     
@@ -45,7 +46,13 @@ class Game {
 
   
   onKeyEvent(event) {
-    this.player.onKeyEvent(event, this);
+    if(this.score.points < 5) {
+      this.player.onKeyEvent(event, this);
+    } else {
+      this.playerH.onKeyEvent(event);
+    }
+    
+    
   }
 
   start() {
@@ -83,12 +90,17 @@ class Game {
 
 
   levelUp() {
-    if(this.score.points % 10 === 0) {
+    if(this.score.points % 5 === 0) {
       this.level++;   
       this.audioLvlUp.play();
     }
 
-    if(this.score.points === 20) {
+    if(this.score.points === 5) {
+      this.enemies = [];
+      this.enemies2 = [];
+      this.enemies3 = [];
+    }
+    if(this.score.points === 10) {
       this.transition();
       setTimeout(() => this.background.sprite.src = '/assets/img/maps/bg2.jpg', 1000);
       this.enemies = [];
@@ -96,7 +108,7 @@ class Game {
       this.enemies3 = [];
       
       
-    } else if (this.score.points === 30) {
+    } else if (this.score.points === 15) {
       this.transition();
       setTimeout(() => this.background.sprite.src = '/assets/img/maps/bg3.jpg', 1000);
       this.enemies = [];
@@ -104,7 +116,7 @@ class Game {
       this.enemies3 = [];
       
       
-    } else if (this.score.points === 40) {
+    } else if (this.score.points === 20) {
       this.transition();
       setTimeout(() => this.background.sprite.src = '/assets/img/maps/bg4.jpg', 1000);
       this.enemies = [];
@@ -112,7 +124,7 @@ class Game {
       this.enemies3 = [];
       
       
-    } else if (this.score.points === 50) {
+    } else if (this.score.points === 25) {
       this.transition();
       setTimeout(() => this.background.sprite.src = '/assets/img/maps/bgBOSS.jpg', 1000);
       this.enemies = [];
@@ -180,6 +192,30 @@ class Game {
       }
     })
 
+    this.playerH.shouts = this.playerH.shouts.filter((shoutV) => {
+      const boss = this.boss.collidesWith(shoutV);
+      if (boss) {
+        this.boss.hp--;
+        this.boss.y -= 50;
+        this.audioDead.play();
+        this.audioDead.volume = 0.1;
+        console.log(this.boss.hp);
+        if (this.boss.isDead()) {
+          this.audioDead.play();
+          this.audioDead.volume = 0.1;
+          this.score.inc();
+          console.log(`${this.score.points} points`);
+          console.log(`${this.level} level`);
+          this.levelUp();
+        }
+        return false;
+      } else {
+        return true;
+      }
+    })
+
+    
+
     this.player.shouts = this.player.shouts.filter((shout) => {
       const enemy = this.enemies2.find(Enemy2 => Enemy2.collidesWith(shout));
       if (enemy) {
@@ -225,16 +261,16 @@ class Game {
     if (this.drawIntervalId) {
       console.log(`Adding enemy, elapsed time ${this.addEnemyBackoff}ms...`)
 
-        if (this.score.points < 10) {
+        if (this.score.points < 5) {
           
           this.enemies.push(
             new enemy(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 1)
           );
-        } else if (this.score.points >= 10 && this.score.points < 20) {
+        } /*else if (this.score.points >= 5 && this.score.points < 10) {
           this.enemies.push(
             new enemy(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 2)
           );
-        } else if (this.score.points >= 30 && this.score.points < 40) {
+        }*/ else if (this.score.points >= 15 && this.score.points < 20) {
           this.enemies.push(
             new enemy(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 1)
           );
@@ -248,17 +284,17 @@ class Game {
     if (this.drawIntervalId) {
       console.log(`Adding enemy, elapsed time ${this.addEnemyBackoff}ms...`)
 
-        if (this.score.points >= 20 && this.score.points < 30) {
+        if (this.score.points >= 10 && this.score.points < 15) {
           
           this.enemies2.push(
             new Enemy2(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 1)
           );
 
-        } else if (this.score.points >= 30 && this.score.points < 40) {
+        } else if (this.score.points >= 15 && this.score.points < 20) {
           this.enemies2.push(
             new Enemy2(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 2)
           );
-        } else if (this.score.points >= 40 && this.score.points < 50) {
+        } else if (this.score.points >= 20 && this.score.points < 25) {
           this.enemies2.push(
             new Enemy2(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 1)
           );
@@ -273,7 +309,7 @@ class Game {
       console.log(`Adding enemy, elapsed time ${this.addEnemyBackoff}ms...`)
 
         
-        if (this.score.points >= 40 && this.score.points < 50) {
+        if (this.score.points >= 20 && this.score.points < 25) {
           this.enemies3.push(
             new Enemy3(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 1)
           );
@@ -283,36 +319,45 @@ class Game {
     setTimeout(() => this.addEnemy3(), this.addEnemy3Backoff);
   }
 
-  addBoss() {
-    if (this.drawIntervalId) {
-      new Boss(this.ctx, this.x, this.y);
-    }
-  }
+
 
   move() {
-    this.player.move();
+    if(this.score.points < 5) {
+      this.player.move();
+    } else {
+      this.playerH.move();
+    }
     this.enemies.forEach((enemy) => enemy.move());
     this.enemies2.forEach((Enemy2) => Enemy2.move());
     this.enemies3.forEach((Enemy3) => Enemy3.move()); 
-   // this.boss.move()
+    this.boss.move();
   }
 
   draw() {
     this.background.draw();
-    this.player.draw();
+    if(this.score.points < 5) {
+      this.player.draw();
+    } else {
+      this.playerH.draw();
+    }
     this.enemies.forEach((enemy) => enemy.draw());
     this.enemies2.forEach((Enemy2) => Enemy2.draw());
     this.enemies3.forEach((Enemy3) => Enemy3.draw());
-    this.boss.draw();
+    if(this.score.points >= 5) {
+      this.boss.draw();
+    }
     this.score.draw();
   }
 
   clear() {
-    this.player.clear();
+    if(this.score.points < 5) {
+      this.player.clear();
+    } else {
+      this.playerH.clear();
+    }
     this.enemies = this.enemies.filter((enemy) => !enemy.isDead());
     this.enemies2 = this.enemies2.filter((Enemy2) => !Enemy2.isDead());
     this.enemies3 = this.enemies3.filter((Enemy3) => !Enemy3.isDead());
-   // this.boss = this.boss.filter((Boss) => !Boss.isDead());
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 

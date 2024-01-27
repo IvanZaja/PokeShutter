@@ -7,6 +7,9 @@ const KEY_UP = 87;
 const KEY_DOWN = 83;
 const KEY_FIRE = 32;
 
+const KEY_LEFT = 65;
+const KEY_RIGHT = 68;
+
 
 const PJ_Y_PADDING = 250;
 const PJ_X_PADDING = 79;
@@ -16,9 +19,16 @@ const PJ_ANIMATION_TICK = 50;
 const PJ_TOP_LIMIT = 100;
 const PJ_BOTTOM_LIMIT = 370;
 
+const PJ_LEFT_LIMIT = 110;
+const PJ_RIGHT_LIMIT = 680;
+
 const ENEMY_Y_PADDING = 250;
 const ENEMY_ANIMATION_TICK = 15;
 const ENEMY_SPEED_MOVE = 1;
+
+const BOSS_ANIMATION_TICK = 35;
+const BOSS_X_PADDING = 335;
+const BOSS_Y_PADDING = 60;
 
 const FINISH_LINE = 140;
 
@@ -26,6 +36,7 @@ const ENEMY_SPAWN_TICK = 300;
 
 const SPEED_MOVE = 5;
 const SPEED_SHOUT = 5;
+const SPEED_SHOUT_V = -5;
 
 const SCORE_KEY = 'scores';
 
