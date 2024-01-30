@@ -50,6 +50,7 @@ class Boss {
 
     isDead() {
         return this.hp <= 0;
+        
     }
 
     draw() {

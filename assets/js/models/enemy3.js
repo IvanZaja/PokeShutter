@@ -44,6 +44,11 @@ class Enemy3 {
     }
   
     draw() {
+      
+      if (this.y < 120) {
+        this.y = 120;
+      }
+
       if (this.sprite.isReady) {
         this.ctx.drawImage(
           this.sprite,

@@ -45,8 +45,8 @@ class enemy {
 
   draw() {
 
-    if (this.y < PJ_TOP_LIMIT) {
-      this.y = PJ_TOP_LIMIT;
+    if (this.y < 120) {
+      this.y = 120;
     }
 
     if (this.sprite.isReady) {

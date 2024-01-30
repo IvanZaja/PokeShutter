@@ -20,6 +20,9 @@ class Game {
 
     this.enemyTick = 1;
     
+    this.userName = undefined;
+
+    this.started = false;
 
     // SISTEMAS DE PUNTUACION ////////
 
@@ -28,12 +31,20 @@ class Game {
     this.level = 1;
 
     /////////////////////////////////
+
+    this.tutorial = {
+      isOpen: false,
+      isClose: false,
+      isFinish: false
+    };
     
+    /////////////////////////////////
     
     this.audioDead = new Audio("/assets/sounds/ballshake.wav");
     this.audioGameOver = new Audio("/assets/sounds/buzzer.wav");
     this.audioGameStarts = new Audio('/assets/sounds/gameBattle.wav');
     this.audioLvlUp = new Audio("/assets/sounds/StatUp.wav");
+    this.audioWin = new Audio("/assets/sounds/AudioWin.wav");
 
     this.addEnemyBackoff = 3000;
     this.addEnemy2Backoff = 7000;
@@ -44,22 +55,95 @@ class Game {
   }
 
 
+
+
+  help() {
+
+    if(!this.tutorial.isOpen || !this.tutorial.isClose || !this.tutorial.isFinish) {
+      const tutorialPanel = document.getElementById('main-tutorial');
+      const tutorialPanel2 = document.getElementById('main-tutorial2');
+      if(!this.tutorial.isOpen) {
+        this.tutorial.isOpen = true;
+        this.stop();
+        tutorialPanel.classList.remove('hidden');
+      } else if (!this.tutorial.isFinish) {
+        this.tutorial.isFinish = true;
+        tutorialPanel.classList.add('hidden');
+        tutorialPanel2.classList.remove('hidden');
+      } else if (!this.tutorial.isClose) {
+        tutorialPanel2.classList.add('hidden');
+        this.start();
+        this.tutorial.isClose = true;
+      }
+      
+    }
+  }
   
   onKeyEvent(event) {
-    if(this.score.points < 5) {
-      this.player.onKeyEvent(event, this);
+    if(this.score.points < 25) {
+      this.player.onKeyEvent(event);
     } else {
       this.playerH.onKeyEvent(event);
     }
     
-    
+    const enabled = event.type === "keydown";
+    switch (event.keyCode) {
+      case KEY_FIRE:
+        if (enabled && this.player.pokeballs === 0) {
+          this.help();
+        }
+        break;
+    }
   }
 
+
   start() {
+
+    if(!this.started){
+      this.started = true;
+      this.userName = prompt("Please enter your name:", "Player");
+      if (this.userName != null && this.userName != "") {
+        
+        if (!this.drawIntervalId) {
+          this.drawIntervalId = setInterval(() => {
+            this.audioGameStarts.play();
+            this.audioGameStarts.volume = 0.05;
+            if(this.score.points === 26){
+              this.congrats();
+            }
+            this.clear();
+            this.move();
+            this.draw();
+            this.checkCollisions();
+            this.endGame();
+          }, this.fps);
+        }
+      } else {
+      if (!this.drawIntervalId) {
+        this.drawIntervalId = setInterval(() => {
+          this.audioGameStarts.play();
+          this.audioGameStarts.volume = 0.05;
+          if(this.score.points === 26){
+            this.congrats();
+          }
+          this.clear();
+          this.move();
+          this.draw();
+          this.checkCollisions();
+          this.endGame();
+        }, this.fps);
+      }
+    }
+
+    
+  } else {
     if (!this.drawIntervalId) {
       this.drawIntervalId = setInterval(() => {
         this.audioGameStarts.play();
         this.audioGameStarts.volume = 0.05;
+        if(this.score.points === 26){
+          this.congrats();
+        }
         this.clear();
         this.move();
         this.draw();
@@ -68,7 +152,7 @@ class Game {
       }, this.fps);
     }
   }
-
+}
 
   transition() {
     const transition = document.getElementById('blackIn');
@@ -93,12 +177,7 @@ class Game {
     if(this.score.points % 5 === 0) {
       this.level++;   
       this.audioLvlUp.play();
-    }
-
-    if(this.score.points === 5) {
-      this.enemies = [];
-      this.enemies2 = [];
-      this.enemies3 = [];
+      this.audioLvlUp.volume = 0.3;
     }
     if(this.score.points === 10) {
       this.transition();
@@ -276,11 +355,11 @@ class Game {
           this.enemies.push(
             new enemy(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 1)
           );
-        } /*else if (this.score.points >= 5 && this.score.points < 10) {
+        } else if (this.score.points >= 5 && this.score.points < 10) {
           this.enemies.push(
             new enemy(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 2)
           );
-        }*/ else if (this.score.points >= 15 && this.score.points < 20) {
+        } else if (this.score.points >= 15 && this.score.points < 20) {
           this.enemies.push(
             new enemy(this.ctx, this.canvas.width, Math.floor (Math.random() * (Math.floor(450) - Math.ceil(200) + 5) + 100), 1)
           );
@@ -332,7 +411,7 @@ class Game {
 
 
   move() {
-    if(this.score.points < 5) {
+    if(this.score.points < 25) {
       this.player.move();
     } else {
       this.playerH.move();
@@ -345,7 +424,7 @@ class Game {
 
   draw() {
     this.background.draw();
-    if(this.score.points < 5) {
+    if(this.score.points < 25) {
       this.player.draw();
     } else {
       this.playerH.draw();
@@ -353,14 +432,14 @@ class Game {
     this.enemies.forEach((enemy) => enemy.draw());
     this.enemies2.forEach((Enemy2) => Enemy2.draw());
     this.enemies3.forEach((Enemy3) => Enemy3.draw());
-    if(this.score.points >= 5) {
+    if(this.score.points >= 25) {
       this.boss.draw();
     }
     this.score.draw();
   }
 
   clear() {
-    if(this.score.points < 5) {
+    if(this.score.points < 25) {
       this.player.clear();
     } else {
       this.playerH.clear();
@@ -371,17 +450,37 @@ class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  gameOver () {
-    this.stop();
-    this.saveScoreName('Ivan');
-    const gameOverPanel = document.getElementById('panelGameOver');
-    gameOverPanel.classList.remove('hidden');
+
+  congrats() {
+    
+      this.stop();
+      const scores = localStorage.getItem(SCORE_KEY) ? JSON.parse(localStorage.getItem(SCORE_KEY)) : {};
+      scores[this.userName] = this.score.points;
+      localStorage.setItem(SCORE_KEY, JSON.stringify(scores));
+      this.transition();
+      this.audioGameStarts.pause();
+      this.audioGameStarts.currentTime = 0; 
+      this.audioWin.play();
+      this.audioWin.volume = 0.1;
+      const winnerPanel = document.getElementById('winnerPanel');
+      winnerPanel.classList.remove('hidden');
     
   }
 
-  saveScoreName(name) {
+  
+
+  gameOver () {
+    this.stop();
     const scores = localStorage.getItem(SCORE_KEY) ? JSON.parse(localStorage.getItem(SCORE_KEY)) : {};
-    scores[name] = this.score.points;
+    scores[this.userName] = this.score.points;
     localStorage.setItem(SCORE_KEY, JSON.stringify(scores));
+
+    const points = document.getElementById('points');
+    points.textContent = `${this.userName} » ${this.score.points} points`;
+
+    const gameOverPanel = document.getElementById('panelGameOver');
+    gameOverPanel.classList.remove('hidden');
   }
+
+
 }

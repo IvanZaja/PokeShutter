@@ -19,6 +19,7 @@
     <h1 class="content">¡Bienvenido a PokeShutter!</h1>
     <button class="btn btn-primary" id="myBtn" onclick="myFunction()">Play</button>
     <button class="btn btn-secondary" id="myBtn2" onclick="myFunction()">Controls</button>
+    
     <video autoplay muted loop id="myVideo">
       <source src="/assets/video/InicioR.mp4" type="video/mp4" >
     </video>
@@ -31,6 +32,7 @@
 
     <div id="panelGameOver" class="hidden" style="position: absolute; background: rgba(0, 0, 0, 0.5); color: rgb(0, 0, 0);">
       <h1 class="contentGameOver">Game Over</h1>
+      <h2 class="contentPoints" id="points">Tu puntuación:</h2>
       <button class="btn btn-secondary" id="myBtnGameOver2" onclick="myFunction()">Main menu</button>
     </div>
     <div style="position: absolute;">
@@ -38,6 +40,11 @@
     </div>
     <canvas id="main-canvas" class="canvas" height="600" width="800">
     </canvas>
+
+    <div id="winnerPanel" class="hidden">
+      <img id="winnerImg" src="/assets/img/diploma.jpg"/>
+      <button class="btn btn-secondary" id="myBtnFinish" onclick="myFunction()">Main menu</button>
+    </div>
 
     <div >
       <img id="main-controls" class="hidden" src="/assets/img/intros/Controles.png"/>
@@ -50,35 +57,12 @@
     <div >
       <img id="main-tutorial2" class="hidden" src="/assets/img/intros/Tutorial2.png"/>
     </div>
-
-    <div >
-      <img id="main-10points" class="hidden" src="/assets/img/intros/10points.png"/>
-    </div>
-
-    <div >
-      <img id="main-20points" class="hidden" src="/assets/img/intros/20points.png"/>
-    </div>
-
-    <div >
-      <img id="main-20pointsB" class="hidden" src="/assets/img/intros/20pointsB.png"/>
-    </div>
-
-    <div >
-      <img id="main-30points" class="hidden" src="/assets/img/intros/30points.png"/>
-    </div>
-
-    <div >
-      <img id="main-40points" class="hidden" src="/assets/img/intros/40points.png"/>
-    </div>
-
-
     
   </section>
     
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
   <script src="/assets/js/constants.js"></script>
-  <script src="/assets/js/models/endline.js"></script>
   <script src="/assets/js/models/enemy.js"></script>
   <script src="/assets/js/models/enemy2.js"></script>
   <script src="/assets/js/models/enemy3.js"></script>
