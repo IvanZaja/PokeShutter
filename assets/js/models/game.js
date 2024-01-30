@@ -44,7 +44,9 @@ class Game {
     this.audioGameOver = new Audio("/assets/sounds/buzzer.wav");
     this.audioGameStarts = new Audio('/assets/sounds/gameBattle.wav');
     this.audioLvlUp = new Audio("/assets/sounds/StatUp.wav");
-    this.audioWin = new Audio("/assets/sounds/AudioWin.wav");
+    this.audioWin = new Audio("/assets/sounds/Radio.wav");
+    this.audioBoss = new Audio("/assets/sounds/249Cry.ogg");
+  
 
     this.addEnemyBackoff = 3000;
     this.addEnemy2Backoff = 7000;
@@ -58,7 +60,6 @@ class Game {
 
 
   help() {
-
     if(!this.tutorial.isOpen || !this.tutorial.isClose || !this.tutorial.isFinish) {
       const tutorialPanel = document.getElementById('main-tutorial');
       const tutorialPanel2 = document.getElementById('main-tutorial2');
@@ -74,8 +75,7 @@ class Game {
         tutorialPanel2.classList.add('hidden');
         this.start();
         this.tutorial.isClose = true;
-      }
-      
+      }     
     }
   }
   
@@ -109,7 +109,13 @@ class Game {
             this.audioGameStarts.play();
             this.audioGameStarts.volume = 0.05;
             if(this.score.points === 26){
-              this.congrats();
+              this.boss.w = 0;
+              this.boss.h = 0;
+              this.boss.shouts = [];
+            this.background.sprite.src = '/assets/img/maps/bgBOSS2.jpg';
+            setTimeout(() =>{
+            this.congrats();
+          }, 1000)
             }
             this.clear();
             this.move();
@@ -124,7 +130,13 @@ class Game {
           this.audioGameStarts.play();
           this.audioGameStarts.volume = 0.05;
           if(this.score.points === 26){
+            this.boss.w = 0;
+            this.boss.h = 0;
+            this.boss.shouts = [];
+            this.background.sprite.src = '/assets/img/maps/bgBOSS2.jpg';
+          setTimeout(() =>{
             this.congrats();
+          }, 1000)
           }
           this.clear();
           this.move();
@@ -142,7 +154,13 @@ class Game {
         this.audioGameStarts.play();
         this.audioGameStarts.volume = 0.05;
         if(this.score.points === 26){
-          this.congrats();
+          this.boss.w = 0;
+          this.boss.h = 0;
+          this.boss.shouts = [];
+          this.background.sprite.src = '/assets/img/maps/bgBOSS2.jpg';
+          setTimeout(() =>{
+            this.congrats();
+          }, 1000)
         }
         this.clear();
         this.move();
@@ -185,7 +203,7 @@ class Game {
       this.enemies = [];
       this.enemies2 = [];
       this.enemies3 = [];
-      
+      this.player.shouts = [];
       
     } else if (this.score.points === 15) {
       this.transition();
@@ -193,7 +211,7 @@ class Game {
       this.enemies = [];
       this.enemies2 = [];
       this.enemies3 = [];
-      
+      this.player.shouts = [];
       
     } else if (this.score.points === 20) {
       this.transition();
@@ -201,16 +219,18 @@ class Game {
       this.enemies = [];
       this.enemies2 = [];
       this.enemies3 = [];
+      this.player.shouts = [];
       
       
     } else if (this.score.points === 25) {
       this.transition();
+      this.audioBoss.play();
+      this.audioBoss.volume = 0.05;
       setTimeout(() => this.background.sprite.src = '/assets/img/maps/bgBOSS.jpg', 1000);
       this.enemies = [];
       this.enemies2 = [];
       this.enemies3 = [];
-
-      
+      this.player.shouts = [];
     }
 
   } 
@@ -452,7 +472,6 @@ class Game {
 
 
   congrats() {
-    
       this.stop();
       const scores = localStorage.getItem(SCORE_KEY) ? JSON.parse(localStorage.getItem(SCORE_KEY)) : {};
       scores[this.userName] = this.score.points;
@@ -460,11 +479,12 @@ class Game {
       this.transition();
       this.audioGameStarts.pause();
       this.audioGameStarts.currentTime = 0; 
-      this.audioWin.play();
-      this.audioWin.volume = 0.1;
-      const winnerPanel = document.getElementById('winnerPanel');
-      winnerPanel.classList.remove('hidden');
-    
+      setTimeout(() => {
+        this.audioWin.play();
+        this.audioWin.volume = 0.05;
+        const winnerPanel = document.getElementById('winnerPanel');
+        winnerPanel.classList.remove('hidden');
+      }, 1000);
   }
 
   
@@ -481,6 +501,4 @@ class Game {
     const gameOverPanel = document.getElementById('panelGameOver');
     gameOverPanel.classList.remove('hidden');
   }
-
-
 }

@@ -16,7 +16,8 @@
 
   <!-- The video -->
   <div id="panel">
-    <h1 class="content">¡Bienvenido a PokeShutter!</h1>
+    
+    <h1 class="content">¡Bienvenido a PokeShooter!</h1>
     <button class="btn btn-primary" id="myBtn" onclick="myFunction()">Play</button>
     <button class="btn btn-secondary" id="myBtn2" onclick="myFunction()">Controls</button>
     
@@ -24,6 +25,9 @@
       <source src="/assets/video/InicioR.mp4" type="video/mp4" >
     </video>
   </div>
+
+
+
   <section style="
     position: relative;
     max-width: 800px;
@@ -35,11 +39,12 @@
       <h2 class="contentPoints" id="points">Tu puntuación:</h2>
       <button class="btn btn-secondary" id="myBtnGameOver2" onclick="myFunction()">Main menu</button>
     </div>
+    
     <div style="position: absolute;">
       <img id="blackIn" class="hidden" src="/assets/img/transicion.jpg"/>
     </div>
-    <canvas id="main-canvas" class="canvas" height="600" width="800">
-    </canvas>
+    
+    <canvas id="main-canvas" class="canvas" height="600" width="800"></canvas>
 
     <div id="winnerPanel" class="hidden">
       <img id="winnerImg" src="/assets/img/diploma.jpg"/>

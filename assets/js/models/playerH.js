@@ -4,8 +4,8 @@ class PlayerH {
     this.x = x;
     this.y = y;
     this.vx = SPEED_MOVE;
-    this.w = Math.ceil(115 / 3.3);
-    this.h = Math.ceil(153 / 3.3);
+    this.w = Math.ceil(16 * 2.3);
+    this.h = Math.ceil(20 * 2.3 );
 
     this.audioShout = new Audio("/assets/sounds/throw.wav");
     this.audioReload = new Audio('/assets/sounds/ItemGet.wav')
@@ -33,7 +33,7 @@ class PlayerH {
     };
 
     this.sprite = new Image();
-    this.sprite.src = "/assets/img/playerH.png";
+    this.sprite.src = "/assets/img/pj-spriteH.png";
     this.sprite.verticalFrames = 3;
     this.sprite.verticalFrameIndex = 2;
     this.sprite.horizontalFrames = 2;

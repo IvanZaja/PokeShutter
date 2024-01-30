@@ -4,8 +4,8 @@ class player {
     this.x = x;
     this.y = y;
     this.vy = SPEED_MOVE;
-    this.w = Math.ceil(115 / 3.3);
-    this.h = Math.ceil(153 / 3.3);
+    this.w = Math.ceil(16 * 2.3);
+    this.h = Math.ceil(20 * 2.3);
 
     this.audioShout = new Audio("/assets/sounds/throw.wav");
     this.audioReload = new Audio('/assets/sounds/ItemGet.wav')
@@ -33,7 +33,7 @@ class player {
     };
 
     this.sprite = new Image();
-    this.sprite.src = "/assets/img/pj-sprite3.png";
+    this.sprite.src = "/assets/img/pj-sprite2.png";
     this.sprite.verticalFrames = 3;
     this.sprite.verticalFrameIndex = 2;
     this.sprite.horizontalFrames = 3;
@@ -124,8 +124,8 @@ class player {
         this.reaction.verticalFrameIndex * this.reaction.frameHeight,
         this.reaction.frameWidth,
         this.reaction.frameHeight,
-        this.x + 3,
-        this.y - 34,
+        this.x + 5,
+        this.y - 30,
         this.reaction.w,
         this.reaction.h
       );

@@ -1,6 +1,8 @@
 window.addEventListener("load", () => {
   const game = new Game("main-canvas");
-  //window.game = game
+  this.audioIntro = new Audio('/assets/sounds/route.wav');
+  this.audioIntro.play();
+  this.audioIntro.volume = 0.05;
 
   this.audioYes = new Audio("/assets/sounds/Choose.WAV");
   document.addEventListener("keydown", (event) => game.onKeyEvent(event));
@@ -17,6 +19,7 @@ window.addEventListener("load", () => {
 
     this.audioYes.play();
     this.audioYes.volume = 0.5;
+    this.audioIntro.pause();
 
     game.start();
   })
@@ -39,7 +42,7 @@ window.addEventListener("load", () => {
   document.addEventListener('keydown', function(event) {        
     if (controlsScreen && event.code === 'Space') {
       location.reload(); 
-      }      
+    }      
   })      
     
   
@@ -53,4 +56,5 @@ window.addEventListener("load", () => {
   myBtnFinish.addEventListener('click', () => {
     location.reload();
   })
+
 });

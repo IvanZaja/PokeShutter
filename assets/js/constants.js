@@ -12,7 +12,7 @@ const KEY_RIGHT = 68;
 
 
 const PJ_Y_PADDING = 250;
-const PJ_X_PADDING = 79;
+const PJ_X_PADDING = 75;
 const PJ_SHOUT_INTERVAL = 200;
 const PJ_RUN_ANIMATION_TICK = 100;
 const PJ_ANIMATION_TICK = 50;
